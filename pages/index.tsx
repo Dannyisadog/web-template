@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from '@next/font/google'
+import Link from 'next/link'
 import styles from '../styles/Home.module.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -20,6 +21,12 @@ export default function Home() {
             Get started by editing&nbsp;
             <code className={styles.code}>pages/index.tsx</code>
           </p>
+          <Link href="/signin">
+            <p className="cusor-pointer">signin</p>
+          </Link>
+          <Link href="/signout">
+            <p>signout</p>
+          </Link>
           <div>
             <a
               href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
