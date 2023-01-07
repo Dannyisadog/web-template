@@ -1,0 +1,12 @@
+.signin_page,
+.done_page {
+  @apply w-screen h-screen flex flex-col justify-center items-center
+}
+
+.container {
+  @apply border-2 rounded p-4 w-72
+}
+
+.signin_button {
+  @apply w-full h-12 bg-[blue] rounded mt-2 first:mt-0 bg-white text-[#333]
+}
