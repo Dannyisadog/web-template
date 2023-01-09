@@ -9,7 +9,7 @@ services:
       - 3000:3000
     volumes:
       - .:/app
-      - node_modules:/app/node_modules
+      - /app/node_modules
 
   db:
     image: postgres:15.1
