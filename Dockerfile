@@ -14,10 +14,11 @@ RUN \
   fi
 
 
-FROM node:16-alpine AS dev
+FROM node:16 AS dev
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules /app/node_modules
+RUN npx prisma generate
 
 CMD ["yarn", "dev"]
 
