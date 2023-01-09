@@ -11,5 +11,20 @@ services:
       - .:/app
       - node_modules:/app/node_modules
 
+  db:
+    image: postgres:15.1
+    container_name: ${APP_NAME}_db
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "password"
+      PGDATA: "/data/postgres"
+    volumes:
+      - postgres:/data/postgres
+      - ./docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
+    ports:
+      - "15432:5432"
+    restart: unless-stopped
+
 volumes:
   node_modules:
+  postgres:
