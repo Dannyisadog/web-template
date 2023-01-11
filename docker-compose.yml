@@ -4,26 +4,26 @@ services:
   app:
     image: ${APP_NAME}
     container_name: ${APP_NAME}
-    restart: always
     ports:
       - 3000:3000
+    restart: always
+    entrypoint: ["/bin/bash", "./entrypoint.sh"]
     volumes:
       - .:/app
-      - node_modules:/app/node_modules
+      - /app/node_modules
 
   db:
     image: postgres:15.1
     container_name: ${APP_NAME}_db
     environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "password"
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       PGDATA: "/data/postgres"
     volumes:
-      - postgres:/data/postgres
-      - ./docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
+      - postgres:/var/lib/postgresql/data
+      - ./docker_postgres_init.sql:/docker-entrypoint-initdb.d
     ports:
-      - "15432:5432"
-    restart: unless-stopped
+      - ${DB_PORT}:5432
 
 volumes:
   node_modules:

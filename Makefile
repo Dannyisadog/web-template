@@ -1,7 +1,7 @@
 include .env
 
 setup:
-	docker build --target dev -t ${APP_NAME} .
+	docker build --no-cache --target dev -t ${APP_NAME} .
 
 up:
 	docker-compose up -d
