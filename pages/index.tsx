@@ -3,10 +3,13 @@ import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
+import { useSession } from "next-auth/react"
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+  const { status } = useSession();
+
   return (
     <>
       <Head>
@@ -21,12 +24,12 @@ export default function Home() {
             Get started by editing&nbsp;
             <code className={styles.code}>pages/index.tsx</code>
           </p>
-          <Link href="/signin">
+          {status !== "authenticated" && <Link href="/signin">
             <p className="cusor-pointer">signin</p>
-          </Link>
-          <Link href="/signout">
+          </Link>}
+          {status === "authenticated" && <Link href="/signout">
             <p>signout</p>
-          </Link>
+          </Link>}
           <div>
             <a
               href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
