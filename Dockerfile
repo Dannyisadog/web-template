@@ -20,7 +20,7 @@ COPY . .
 COPY --from=deps /app/node_modules /app/node_modules
 RUN npx prisma generate
 
-CMD ["yarn", "dev"]
+
 
 # Rebuild the source code only when needed
 FROM node:16-alpine AS builder
