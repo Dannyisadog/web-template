@@ -2,13 +2,14 @@ import { prisma } from "db";
 import { SigninUserProps } from "types/nextauth/SigninCallbackProps";
 
 export const create = async (user: SigninUserProps) => {
-  const {name, email, image} = user;
+  const {name, password, email, image} = user;
   let newUser = null;
 
   try {
     newUser = await prisma.user.create({
       data: {
         name,
+        password,
         email,
         image
       },
