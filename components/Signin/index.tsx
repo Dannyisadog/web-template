@@ -46,7 +46,7 @@ const SigninPage = (props: SigninProps) => {
           <input ref={emailRef} className={style.input} placeholder="email" type="text" />
           <input ref={passwordRef} className={style.input} placeholder="password" type="password" />
           <div className={style.register_container}>
-            <Link href="/reset/password" className={style.register_link}>Forgot Password</Link>
+            <Link href="/recovery/password" className={style.register_link}>Forgot Password</Link>
             <Link href="/register" className={style.register_link}>Register</Link>
           </div>
         </div>
