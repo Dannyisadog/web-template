@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 import { isEmail } from "utils/util";
 import { create as createUser, findUserByEmail } from "../service/User";
 import bcrypt from "bcryptjs";
+import { isPasswordValid } from "../service/password";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -36,9 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       throw new Error("password should be the same");
     }
 
-    if (password.length < 8) {
-      throw new Error("password length should more than 8 characters");
-    }
+    isPasswordValid(password);
 
     const passwordHash = bcrypt.hashSync(password, 10);
 
