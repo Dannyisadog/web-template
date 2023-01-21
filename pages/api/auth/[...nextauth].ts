@@ -1,4 +1,5 @@
 import NextAuth from "next-auth"
+import CredentialProvider from "./CredentialProvider";
 import GithubProvider from "./GithubProvider";
 import { SigninUserProps } from "types/nextauth/SigninCallbackProps";
 import { create as createUser, findUserByEmail } from "../service/User";
@@ -9,6 +10,7 @@ export const authOptions = {
   },
   // Configure one or more authentication providers
   providers: [
+    CredentialProvider,
     GithubProvider
   ],
   callbacks: {
