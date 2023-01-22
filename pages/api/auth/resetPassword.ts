@@ -1,13 +1,15 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { isPasswordValid } from "../service/password";
 import bcrypt from "bcryptjs";
 import { findUserByEmail } from "../service/User";
 import { prisma } from "db";
+import BaseApiHandler from "../base/baseApiHandler";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const apiHandler = new BaseApiHandler(req, res);
   try {
     if (req.method !== 'POST') {
-      throw new Error("only post method allowed");
+      apiHandler.send405();
     }
 
     const body = JSON.parse(req.body)
@@ -47,18 +49,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     })
 
-    res.status(200).send({
+    apiHandler.json({
       "msg": "reset password successfully"
     });
 
   } catch(e) {
     if (e instanceof Error) {
-      res.status(200).send({
-        "errMsg": e.message
-      });
+      apiHandler.send400(e.message);
+    } else {
+      apiHandler.send500();
     }
-    res.status(500).send({
-      "errMsg": "something crash"
-    })
   }
 }

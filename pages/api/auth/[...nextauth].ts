@@ -1,8 +1,8 @@
 import NextAuth from "next-auth"
 import CredentialProvider from "./CredentialProvider";
 import GithubProvider from "./GithubProvider";
-import { SigninUserProps } from "types/nextauth/SigninCallbackProps";
 import { create as createUser, findUserByEmail } from "../service/User";
+import User from "types/next-auth";
 
 export const authOptions = {
   pages: {
@@ -14,7 +14,7 @@ export const authOptions = {
     GithubProvider
   ],
   callbacks: {
-    async signIn({ user }: {user: SigninUserProps}) {
+    async signIn({ user }: { user: User}) {
       try {
         const { email } = user;
 

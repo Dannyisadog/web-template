@@ -1,5 +1,9 @@
-import { NextApiRequest, NextApiResponse } from "next"
+import type { NextApiRequest, NextApiResponse } from "next"
+import BaseApiHandler from "./base/baseApiHandler"
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  res.status(200).json({ "status": "ok" })
+export default function Handler(req: NextApiRequest, res: NextApiResponse) {
+  const apiHandler = new BaseApiHandler(req, res);
+  apiHandler.json({
+    "status": "ok"
+  })
 }
