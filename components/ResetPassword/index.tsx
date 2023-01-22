@@ -1,5 +1,5 @@
 import style from "./ResetPassword.module.css";
-import { ResetPasswordProps } from "pages/reset/PasswordProps";
+import { ResetPasswordProps } from "types/signin/PasswordProps";
 import { useRef } from "react";
 
 const ResetPassword = (props: ResetPasswordProps) => {

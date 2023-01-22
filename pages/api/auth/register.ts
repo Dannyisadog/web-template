@@ -1,14 +1,15 @@
-import { NextApiRequest, NextApiResponse } from "next"
+import type { NextApiRequest, NextApiResponse } from "next"
 import { isEmail } from "utils/util";
 import { create as createUser, findUserByEmail } from "../service/User";
 import bcrypt from "bcryptjs";
 import { isPasswordValid } from "../service/password";
+import BaseApiHandler from "../base/baseApiHandler";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const apiHandler = new BaseApiHandler(req, res);
+
   if (req.method !== 'POST') {
-    res.status(405).send({
-      "error": "post method allowed"
-    });
+    apiHandler.send405();
   }
   const body = JSON.parse(req.body)
   const {
@@ -50,19 +51,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     await createUser(newUser);
 
-    res.status(200).send({
-      "success": "register successfully"
+    apiHandler.json({
+      "msg": "register successfully" 
     });
     
   } catch (e) {
     if (e instanceof Error) {
-      res.status(200).send({
-        "error": e.message
-      });  
+      apiHandler.send400(e.message);
     } else {
-      res.status(200).send({
-        "error": "something's crash"
-      });  
+      apiHandler.send500();
     }
   }
 }

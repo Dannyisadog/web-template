@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next";
 import ResetPassword from "components/ResetPassword";
-import jwt from "jsonwebtoken";
-import { ResetPasswordProps } from "./PasswordProps";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { ResetPasswordProps } from "../../types/signin/PasswordProps";
 
 const ResetPasswordPage = (props: ResetPasswordProps) => {
   const { email } = props;
@@ -20,10 +20,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       throw new Error("toke should not be empty");
     }
 
-    const KEY = process.env.NEXTAUTH_SECRET;
-    const {
-      email
-    } = jwt.verify(token, KEY);
+    const KEY = process.env.NEXTAUTH_SECRET || '';
+
+    const { email } = jwt.verify(token.toString(), KEY) as JwtPayload;
 
     if (!email) {
       throw new Error("email not exist");

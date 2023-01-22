@@ -9,7 +9,7 @@ import { useRef, useState } from "react";
 const SigninPage = (props: SigninProps) => {
   const { providers } = props;
   const { status } = useSession();
-  const [errorMsg, setErrorMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState<String | undefined>("");
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -29,7 +29,7 @@ const SigninPage = (props: SigninProps) => {
         password: passwordRef.current?.value
       })
       
-      const { error } = result;
+      const error = result?.error;
       setErrorMsg(error);      
     } else {
       signIn(provider, {

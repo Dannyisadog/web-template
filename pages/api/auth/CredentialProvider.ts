@@ -2,6 +2,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { isEmail } from "utils/util";
 import { findUserByEmail } from "../service/User";
 import bcrypt from "bcryptjs";
+import Session from "types/next-auth";
 
 export default CredentialsProvider({
   // The name to display on the sign in form (e.g. "Sign in with...")
@@ -15,22 +16,18 @@ export default CredentialsProvider({
     password: { label: "password", type: "password", placeholder: "password" }
   },
   async authorize(credentials, req) {
-    const {
-      email,
-      password
-    } = credentials;
+    const email = credentials?.email;
+    const password = credentials?.password;
 
-    console.log({email});
-    console.log({password});
-    
-    if (!isEmail(email)) {
+    if (!password || !isEmail(email)) {
       throw new Error("email or password incorrect")
     }
 
     const existUser = await findUserByEmail(email);
 
     if (!existUser) {
-      throw new Error("email or password incorrect")
+      // throw new Error("email or password incorrect")
+      return null;
     }
     
     const { password: userPassword } = existUser;
@@ -38,7 +35,10 @@ export default CredentialsProvider({
     if (!bcrypt.compareSync(password, userPassword)) {
       throw new Error("email or password incorrect")
     }
-
+    
     return existUser;
   }
 })
+
+'(credentials: Record<"email" | "password", string> | undefined, req: Pick<RequestInternal, "body" | "query" | "headers" | "method">) => Promise<...>'
+'(credentials: Record<"email" | "password", string> | undefined, req: Pick<RequestInternal, "body" | "query" | "headers" | "method">) => Awaitable<...>'

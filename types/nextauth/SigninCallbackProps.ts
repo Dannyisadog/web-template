@@ -1,6 +1,6 @@
 export interface SigninUserProps {
   name: string;
-  password: string;
+  password?: string;
   email: string;
   image: string;
 }

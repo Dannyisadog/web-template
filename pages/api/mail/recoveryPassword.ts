@@ -3,8 +3,10 @@ import nodemailer from 'nodemailer';
 import { isEmail } from 'utils/util';
 import { findUserByEmail } from '../service/User';
 import jwt from "jsonwebtoken";
+import BaseApiHandler from '../base/baseApiHandler';
 
-export default async function(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const apiHandler = new BaseApiHandler(req, res);
   const mailer = nodemailer.createTransport({
     host: 'mailhog',
     port: 1025,
@@ -31,7 +33,7 @@ export default async function(req: NextApiRequest, res: NextApiResponse) {
       throw new Error("user not existed");
     }
 
-    const KEY = process.env.NEXTAUTH_SECRET;
+    const KEY = process.env.NEXTAUTH_SECRET || '';
 
     const token = jwt.sign({
       exp: Math.floor(Date.now() / 1000) + (60 * 60),
@@ -45,18 +47,15 @@ export default async function(req: NextApiRequest, res: NextApiResponse) {
       html: `<a href='http://localhost:3000/reset/password?token=${token}'>Link</a>`
     });
 
-    res.status(200).send({
-      "data": {
-        "msg": "reset password link sent successfully"
-      }
-    })
+    apiHandler.json({
+      "msg": "reset password link sent successfully"
+    });
+
   } catch (e) {
     if (e instanceof Error) {
-      res.status(200).send({
-        "data": {
-          "msg": e.message
-        }
-      })
+      apiHandler.send400(e.message);
+    } else {
+      apiHandler.send500();
     }
   }
 }
