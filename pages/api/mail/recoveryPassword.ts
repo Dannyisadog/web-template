@@ -1,21 +1,28 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import nodemailer from 'nodemailer';
-import { isEmail } from 'utils/util';
+import { getUrl, isEmail } from 'utils/util';
 import { findUserByEmail } from '../service/User';
 import jwt from "jsonwebtoken";
 import BaseApiHandler from '../base/baseApiHandler';
+import mg from 'nodemailer-mailgun-transport';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const apiHandler = new BaseApiHandler(req, res);
-  const mailer = nodemailer.createTransport({
-    host: 'mailhog',
-    port: 1025,
-    ignoreTLS: true
-  });
-
-  const body = JSON.parse(req.body)
   
   try {
+    const MAILGUN_API_KEY = process.env.MAILGUN_API_KEY ?? '';
+    const MAILGUN_DOMAIN = process.env.MAILGUN_DOMAIN ?? '';
+
+    const auth = {
+      auth: {
+        api_key: MAILGUN_API_KEY,
+        domain: MAILGUN_DOMAIN
+      }
+    }
+
+    const mailer = nodemailer.createTransport(mg(auth));
+
+    const body = JSON.parse(req.body)
 
     if (req.method !== 'POST') {
       throw new Error("post method allowed");
@@ -41,10 +48,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }, KEY);
 
     await mailer.sendMail({
-      from: 'no-reply@web_template.com',
+      from: 'no-reply@wtemplate.dannyisadog.com',
       to: email,
       subject: 'Reset Password in web-template',
-      html: `<a href='http://localhost:3000/reset/password?token=${token}'>Link</a>`
+      html: `<a href='${getUrl()}/reset/password?token=${token}'>Link</a>`
     });
 
     apiHandler.json({
@@ -53,6 +60,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   } catch (e) {
     if (e instanceof Error) {
+      console.log(e.message);
       apiHandler.send400(e.message);
     } else {
       apiHandler.send500();
