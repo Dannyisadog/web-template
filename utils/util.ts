@@ -7,3 +7,9 @@ export const isEmail = (email: string | undefined) => {
 
   return regex.test(email);
 }
+
+export const getUrl = () => {
+  const isProduction = process.env.NODE_ENV === 'production';
+
+  return isProduction ? 'https://template.dannyisadog.com' : 'http://localhost:3000'
+}
