@@ -14,44 +14,44 @@ class BaseApiHandler {
   }
 
   // 400 response
-  send400(errMsg: string) {
+  send400(msg = "Bad Request") {
     return this.res.status(400).send({
-      errMsg
+      msg
     })
   }
 
   // 401 response
-  send401(errMsg = "Authorization Required") {
+  send401(msg = "Authorization Required") {
     return this.res.status(401).send({
-      errMsg
+      msg
     })
   }
 
   // 403 response
-  send403(errMsg = "Not Allowed To Access") {
+  send403(msg = "Not Allowed To Access") {
     return this.res.status(403).send({
-      errMsg
+      msg
     })
   }
 
   // 404 response
-  send404(errMsg = "Not Found") {
+  send404(msg = "Not Found") {
     return this.res.status(404).send({
-      errMsg
+      msg
     })
   }
 
   // 405 response
-  send405(errMsg = "Method not Allowed") {
+  send405(msg = "Method not Allowed") {
     return this.res.status(405).send({
-      errMsg
+      msg
     })
   }
 
   // 500 response
-  send500(errMsg = "System Crash") {
+  send500(msg = "System Crash") {
     return this.res.status(500).send({
-      errMsg
+      msg
     })
   }
 }
