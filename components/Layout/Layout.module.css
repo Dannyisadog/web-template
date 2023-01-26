@@ -1,0 +1,23 @@
+.nav {
+  @apply absolute px-8 text-[#f0f0f0] flex justify-between items-center z-40 top-0 left-0 w-screen h-14 bg-black shadow-xl shadow-cyan-500/20
+}
+
+.left_container {
+  @apply flex items-center
+}
+
+.logo {
+  @apply text-2xl
+}
+
+.item_container {
+  @apply flex ml-8 justify-between items-center h-full
+}
+
+.link {
+  @apply duration-300 ml-4 cursor-pointer first:ml-0 text-[#888] hover:text-[#f0f0f0]
+}
+
+.alert_container {
+  @apply absolute right-0 top-24 flex flex-col items-end pr-8
+}
