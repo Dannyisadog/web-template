@@ -2,7 +2,8 @@
   @apply absolute px-8 text-[#f0f0f0] flex justify-between items-center z-40 top-0 left-0 w-screen h-14 bg-black shadow-xl shadow-cyan-500/20
 }
 
-.left_container {
+.left_container,
+.right_container {
   @apply flex items-center
 }
 
