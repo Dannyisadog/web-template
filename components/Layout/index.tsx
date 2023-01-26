@@ -12,9 +12,11 @@ import { useEffect } from "react";
 import { Alert } from "@mui/material";
 import { resetMsg } from "redux/features/globalAlert/globalAlertSlice";
 import Head from "next/head";
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 const Layout = (props: LayoutProps) => {
-  const { status } = useSession();
+  const { status, data } = useSession();
+  const user = data?.user;
   const { children } = props;
   const showLoader = useSelector((state: RootState) => state.loader.show);
   const showAlert = useSelector((state: RootState) => state.globalAlert.hasAlert);
@@ -60,10 +62,14 @@ const Layout = (props: LayoutProps) => {
           <Link href="/" className={style.logo}>Template</Link>
           <ul className={style.item_container}>
             <Link className={style.link} href="/">Home</Link>
+            <Link className={style.link} href="https://github.com/Dannyisadog/web-template" target="_blank">
+              <GitHubIcon />
+            </Link>
           </ul>
         </div>
-        <div>
+        <div className={style.right_container}>
           {status !== 'authenticated' && <Link className={style.link} href="/signin">Signin</Link>}
+          {user && <div>{user.name}</div>}
           {status === 'authenticated' && <div className={style.link} onClick={() => {
             signout();
           }} >Signout</div>}
