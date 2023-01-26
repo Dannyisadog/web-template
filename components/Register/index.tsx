@@ -1,13 +1,19 @@
 import style from "./Register.module.css";
 import { useRef } from "react";
+import useFetch from "hooks/useFetch";
+import { useRouter } from "next/router";
 
 const Register = () => {
+  const router = useRouter();
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const passwordConfirmRef = useRef<HTMLInputElement>(null);
+  const { post } = useFetch({
+    url: '/api/auth/register'
+  });
 
-  const registerHandler = () => {
+  const registerHandler = async () => {
     const username = nameRef.current?.value;
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
@@ -20,10 +26,13 @@ const Register = () => {
       passwordConfirm
     };
 
-    fetch('/api/auth/register', {
-      method: 'POST',
-      body: JSON.stringify(data)
-    });
+    const result = await post(data);
+
+    if (result.ok) {
+      setTimeout(() => {
+        router.push("/signin");
+      }, 1000);
+    }
   }
   return (
     <>
