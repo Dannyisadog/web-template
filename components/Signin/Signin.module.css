@@ -30,3 +30,7 @@
 .err_msg {
   @apply text-sm text-[#ff4c4c]
 }
+
+.credential_button {
+  @apply border-[#1f92f6] text-[#1f92f6] hover:bg-[#1f92f6] hover:text-[#f0f0f0]
+}

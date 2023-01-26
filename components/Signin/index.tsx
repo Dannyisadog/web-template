@@ -5,11 +5,16 @@ import { useSession } from "next-auth/react"
 import { useEffect } from "react";
 import Link from "next/link";
 import { useRef, useState } from "react";
+import CredentialButton from "./CredentialButton";
+import GithubButton from "./GithubButton";
+import { useDispatch } from "react-redux";
+import { show, hide } from "redux/features/loader/loaderSlice";
 
 const SigninPage = (props: SigninProps) => {
   const { providers } = props;
   const { status } = useSession();
   const [errorMsg, setErrorMsg] = useState<String | undefined>("");
+  const dispatch = useDispatch();
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -21,6 +26,7 @@ const SigninPage = (props: SigninProps) => {
   }, [status]);
 
   const signin = async (provider: any) => {
+    dispatch(show());
     if (provider === 'credentials') {
       const result = await signIn(provider, {
         callbackUrl: '/signin/done',
@@ -28,13 +34,24 @@ const SigninPage = (props: SigninProps) => {
         email: emailRef.current?.value,
         password: passwordRef.current?.value
       })
-      
       const error = result?.error;
       setErrorMsg(error);      
     } else {
-      signIn(provider, {
+      await signIn(provider, {
         callbackUrl: '/signin/done',
       })
+    }
+    dispatch(hide());
+  }
+
+  const renderButton = (id: string) => {
+    switch (id) {
+      case 'credentials':
+        return <CredentialButton signin={() => signin(id)} />
+      case 'github':
+        return <GithubButton signin={() => signin(id)} />
+      default:
+        break;
     }
   }
 
@@ -53,14 +70,15 @@ const SigninPage = (props: SigninProps) => {
         <div className={style.container}>
           {Object.values(providers).map((provider) => (
             <div className={style.signin_button_container} key={provider.name}>
-              <button
-                className={style.signin_button}
+              {/* <button
+                className={`${style.signin_button}`}
                 onClick={() => {
                   signin(provider.id)
                 }}
               >
                 Sign in with {provider.name}
-              </button>
+              </button> */}
+              {renderButton(provider.id)}
             </div>
           ))}
         </div>
