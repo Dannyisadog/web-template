@@ -1,12 +1,17 @@
 import style from "./ResetPassword.module.css";
 import { ResetPasswordProps } from "types/signin/PasswordProps";
 import { useRef } from "react";
+import useFetch from "hooks/useFetch";
 
 const ResetPassword = (props: ResetPasswordProps) => {
   const { email } = props;
 
   const newPasswordRef = useRef<HTMLInputElement>(null);
   const newPasswordConfirmRef = useRef<HTMLInputElement>(null);
+
+  const { post } = useFetch({
+    url: '/api/auth/resetPassword'
+  })
 
   const reset = async () => {
     const newPassword = newPasswordRef.current?.value;
@@ -17,13 +22,8 @@ const ResetPassword = (props: ResetPasswordProps) => {
       newPasswordConfirm,
       email
     }
-
-    const result = await fetch('/api/auth/resetPassword', {
-      method: 'POST',
-      body: JSON.stringify(data)
-    });
-
-    console.log(result);
+    
+    post(data);
   }
 
   return (
