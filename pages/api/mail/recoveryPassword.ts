@@ -5,6 +5,9 @@ import { findUserByEmail } from '../service/User';
 import jwt from "jsonwebtoken";
 import BaseApiHandler from '../base/baseApiHandler';
 import mg from 'nodemailer-mailgun-transport';
+import { readFileSync } from 'fs';
+import Handlebars from 'handlebars';
+import path from 'path';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const apiHandler = new BaseApiHandler(req, res);
@@ -47,11 +50,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       email
     }, KEY);
 
+    const templatePath = `template/recoveryPassword.hbs`;
+    const source = readFileSync(templatePath, 'utf8');
+    const template = Handlebars.compile(source);
+
+    const { name } = existUser;
+    const link = `${getUrl()}/reset/password?token=${token}`;
+
+    const html = template({ name, link });
+
     await mailer.sendMail({
-      from: 'no-reply@wtemplate.dannyisadog.com',
+      from: 'no-reply@template.dannyisadog.com',
       to: email,
-      subject: 'Reset Password in web-template',
-      html: `<a href='${getUrl()}/reset/password?token=${token}'>Link</a>`
+      subject: 'Reset Password',
+      html
     });
 
     apiHandler.json({
