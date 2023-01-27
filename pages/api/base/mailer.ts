@@ -20,22 +20,21 @@ class Mailer {
   }
 
   private setup() {
-    if (!this.MAILGUN_API_KEY) {
-      throw new Error("MAIL API KEY SHOULD NOT BE EMPTY");
-    }
-  
-    if (!this.MAILGUN_DOMAIN) {
-      throw new Error("MAIL DOMAIN SHOULD NOT BE EMPTY");
-    }
-  
-    const auth = {
-      auth: {
-        api_key: this.MAILGUN_API_KEY,
-        domain: this.MAILGUN_DOMAIN
-      }
-    }
-    
     if (process.env.NODE_ENV === 'production') {
+      if (!this.MAILGUN_API_KEY) {
+        throw new Error("MAIL API KEY SHOULD NOT BE EMPTY");
+      }
+    
+      if (!this.MAILGUN_DOMAIN) {
+        throw new Error("MAIL DOMAIN SHOULD NOT BE EMPTY");
+      }
+    
+      const auth = {
+        auth: {
+          api_key: this.MAILGUN_API_KEY,
+          domain: this.MAILGUN_DOMAIN
+        }
+      }
       this.mailer = nodemailer.createTransport(mg(auth));
     } else {
       this.mailer = nodemailer.createTransport({
