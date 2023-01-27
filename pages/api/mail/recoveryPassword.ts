@@ -50,9 +50,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       email
     }, KEY);
 
-    const templatePath = `template/recoveryPassword.hbs`;
-    const source = readFileSync(templatePath, 'utf8');
-    const template = Handlebars.compile(source);
+    const templateDirectory = path.resolve(process.cwd(), "template");
+    const emailTemplate = readFileSync(path.join(templateDirectory, "recoveryPassword.hbs"), "utf8");
+
+    const template = Handlebars.compile(emailTemplate);
 
     const { name } = existUser;
     const link = `${getUrl()}/reset/password?token=${token}`;
