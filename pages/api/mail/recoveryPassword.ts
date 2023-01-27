@@ -1,30 +1,17 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import nodemailer from 'nodemailer';
 import { getUrl, isEmail } from 'utils/util';
 import { findUserByEmail } from '../service/User';
 import jwt from "jsonwebtoken";
 import BaseApiHandler from '../base/baseApiHandler';
-import mg from 'nodemailer-mailgun-transport';
 import { readFileSync } from 'fs';
 import Handlebars from 'handlebars';
 import path from 'path';
+import Mailer from '../base/mailer';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const apiHandler = new BaseApiHandler(req, res);
   
   try {
-    const MAILGUN_API_KEY = process.env.MAILGUN_API_KEY ?? '';
-    const MAILGUN_DOMAIN = process.env.MAILGUN_DOMAIN ?? '';
-
-    const auth = {
-      auth: {
-        api_key: MAILGUN_API_KEY,
-        domain: MAILGUN_DOMAIN
-      }
-    }
-
-    const mailer = nodemailer.createTransport(mg(auth));
-
     const body = JSON.parse(req.body)
 
     if (req.method !== 'POST') {
@@ -59,12 +46,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const link = `${getUrl()}/reset/password?token=${token}`;
 
     const html = template({ name, link });
+    const mailer = new Mailer();
 
-    await mailer.sendMail({
-      from: 'no-reply@template.dannyisadog.com',
-      to: email,
+    mailer.send({
+      template: html,
       subject: 'Reset Password',
-      html
+      to: email
     });
 
     apiHandler.json({
