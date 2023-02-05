@@ -1,6 +1,10 @@
+# Web Template
 This is a [Next.js](https://nextjs.org/) template project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [next-auth](https://next-auth.js.org/) signin and backend db initialized feature
 
-## Getting Started
+![alt demo image](public/demo-img.png)
+![alt demo image](public/demo-img2.png)
+
+# Getting Started
 
 1. create .env file
 
